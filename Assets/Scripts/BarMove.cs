@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BarMove : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class BarMove : MonoBehaviour
 
     private float initSpeed;
 
-    public float ballSpeed;
+    private float ballSpeed;
     private float xForce, yForce;
 
     private float gap;
@@ -22,8 +21,7 @@ public class BarMove : MonoBehaviour
 
     void Start()
     {
-        speed = 4;
-        //speed = GameManagement.barSpeed;
+        speed = GameManager.barSpeed;
         ballSpeed = GameObject.Find("Ball").GetComponent<BallMove>().speed;
         initSpeed = speed;
         leftWallCol = false;
@@ -37,26 +35,25 @@ public class BarMove : MonoBehaviour
 
     private void barMovement()
     {
-        if (Input.GetKey(KeyCode.LeftArrow) && !leftWallCol && !Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeySetting.keys[KeyAction.LEFT]) && !leftWallCol && !Input.GetKey(KeySetting.keys[KeyAction.RIGHT]))
         {
             transform.Translate(Vector2.left * speed * Time.deltaTime);
         }
-        else if (Input.GetKey(KeyCode.RightArrow) && !rightWallCol && !Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeySetting.keys[KeyAction.RIGHT]) && !rightWallCol && !Input.GetKey(KeySetting.keys[KeyAction.LEFT]))
         {
-            transform.Translate(Vector2.right * speed * Time.deltaTime);
+            transform.Translate(Vector3.right * speed * Time.deltaTime);
         }
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeySetting.keys[KeyAction.BOOST]))
         {
             KeyDown_L(true);
         }
-        if (Input.GetKeyUp(KeyCode.L))
+        if (Input.GetKeyUp(KeySetting.keys[KeyAction.BOOST]))
         {
             KeyDown_L(false);
         }
 
         //물리 약간 적용
         //transform.Translate(new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime, 0));
-
     }
 
     private void KeyDown_L(bool boostOn)
